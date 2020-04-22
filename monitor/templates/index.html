@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Monitor</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <h2>AI plays Google Dino</h2>
+    </header>
+    <div class="container">
+      <h2 class="section-title">Network data</h2>
+      <section class="cards">
+        <div class="card">
+          <div class="card-title">
+            Obstacles
+          </div>
+          <h1 class="card-content" id="obstacles">0</h1>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Distance
+          </div>
+          <h1 class="card-content" id="distance">0</h1>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Length
+          </div>
+          <h1 class="card-content" id="length">0</h1>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Speed
+          </div>
+          <h1 class="card-content" id="speed">0</h1>
+        </div>
+      </section>
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      const socket = io();
+
+      socket.on("game-state", (data) => {
+        Object.keys(data).forEach((key) => {
+          document.getElementById(key).innerHTML = data[key];
+        });
+      });
+    </script>
+  </body>
+</html>
