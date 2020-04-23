@@ -1,7 +1,5 @@
 import curses
 
-stdscr = curses.initscr()
-
 class Game:
     def __init__(self):
         self.distance = 0
@@ -31,7 +29,8 @@ class Game:
         return 'Running'
 
     def log(self):
-        curses.curs_set(0)
+        stdscr = curses.initscr()
+        curses.curs_set(False)
         stdscr.clear()
         stdscr.addstr(3, 5, 'AI plays Dino')
         stdscr.addstr(7, 5, 'Distance: {}'.format(self.distance))

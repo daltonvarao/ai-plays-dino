@@ -85,13 +85,13 @@ class ImageScanner:
 
     def game_position(self, img):
         minv1 = self.img.T.argmin()
-        minv2 = self.img.argmin()
-
-        top = minv2//self.img.shape[1]
-        right = minv2%self.img.shape[1]
 
         left = minv1//self.img.shape[0]
         bottom = minv1%self.img.shape[0]
+
+        minv2 = self.img[:bottom - 20].argmin()
+        top = minv2//self.img.shape[0]
+        right = minv2%self.img.shape[0]
 
         return {
             'top': top, 

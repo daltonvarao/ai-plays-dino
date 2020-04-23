@@ -1,6 +1,7 @@
 import time
 import pyautogui
 from pynput import keyboard
+import curses
 
 from lib.screen_reader import ScreenReader, ImageScanner
 from lib.game import Game
@@ -14,9 +15,12 @@ game = Game()
 # novo = 0
 
 while True:
-    img = screen.grab((20, 100, int(WIDTH*0.48), int(600*0.78)))
+    img = screen.grab((20, 100, int(WIDTH*0.48), int(HEIGHT*0.78)))
+
     scanner.add_image(img)
     scanner.adjust_game_position()
+
+    # screen.show(scanner.img)
 
     if not scanner.game_over():
         game.run()
@@ -39,3 +43,6 @@ while True:
     else:
         game = Game()
     game.log()
+
+curses.endwin()
+curses.curs_set(True)
