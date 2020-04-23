@@ -4,7 +4,7 @@
 
 ### Open one Chrome tab and one Terminal tab like the image above and follow instructions
 
-![Enviroment to run the program](./assets/ai-plays-dino.png)
+![Enviroment to run the program](./assets/workspace.png)
 
 - Open [chrome://dino](chrome://dino/) at google chrome tab
 - Finally, enter in project directory in your terminal and type
