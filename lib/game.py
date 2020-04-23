@@ -1,7 +1,6 @@
 import curses
 
 stdscr = curses.initscr()
-curses.curs_set(0)
 
 class Game:
     def __init__(self):
@@ -26,11 +25,17 @@ class Game:
             'obstacles': self.obstacles
         }
 
+    def status(self):
+        if self.stopped:
+            return 'Stopped'
+        return 'Running'
+
     def log(self):
+        curses.curs_set(0)
         stdscr.clear()
         stdscr.addstr(3, 5, 'AI plays Dino')
         stdscr.addstr(7, 5, 'Distance: {}'.format(self.distance))
         stdscr.addstr(7, 35, 'Length: {}'.format(self.length))
         stdscr.addstr(7, 60, 'Obstaculos: {}'.format(self.obstacles))
-        stdscr.addstr(10, 5, 'Status: {}'.format('Stopped' if self.stopped else 'Running'))
+        stdscr.addstr(10, 5, 'Status: {}'.format(self.status()))
         stdscr.refresh()

@@ -54,9 +54,9 @@ class ImageScanner:
     def game_over(self):
         white_pixels = np.count_nonzero(self.img[:60])
 
-        if white_pixels < 32350:
-            return True
-        return False
+        if white_pixels > 33200:
+            return False
+        return True
 
     def add_image(self, img):
         self.img = img

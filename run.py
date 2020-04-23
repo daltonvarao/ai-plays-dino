@@ -5,6 +5,8 @@ from pynput import keyboard
 from lib.screen_reader import ScreenReader, ImageScanner
 from lib.game import Game
 
+WIDTH, HEIGHT = pyautogui.size()
+
 screen = ScreenReader()
 scanner = ImageScanner()
 game = Game()
@@ -12,8 +14,7 @@ game = Game()
 # novo = 0
 
 while True:
-    img = screen.grab((20, 100, 660, 600))
-
+    img = screen.grab((20, 100, int(WIDTH*0.48), int(600*0.78)))
     scanner.add_image(img)
     scanner.adjust_game_position()
 
@@ -36,5 +37,5 @@ while True:
             game.set_state(distance, length, False)
 
     else:
-        game.set_state(0, 0, True)
+        game = Game()
     game.log()
