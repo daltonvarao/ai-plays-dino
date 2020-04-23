@@ -18,6 +18,7 @@ while True:
     scanner.adjust_game_position()
 
     if not scanner.game_over():
+        game.run()
         distance = scanner.obstacle_distance()
 
         if distance:
