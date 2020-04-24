@@ -14,7 +14,7 @@ game = Game()
 time2 = 0
 distance1 = 0
 speeds = []
-speed = 0
+speed = 2.9
 
 while True:
     img = screen.grab((20, 100, int(WIDTH*0.49), int(HEIGHT*0.78)))
