@@ -21,7 +21,9 @@ class ScreenReader:
         return img
 
     def inverse(self, img):
-        return np.abs(img - 1)
+        img = np.abs(img - 1)
+        img = self.binarize(img)
+        return img
 
     def dark_mode(self, img):
         white_pixels = np.count_nonzero(img)
@@ -74,18 +76,17 @@ class ImageScanner:
         left = minv1//self.img.shape[0]
         return left
 
-    def obstacle_length(self):
-        indexes = np.argwhere(self.img.sum(axis=0) != self.img.shape[0]).flatten()
-        
+    def obstacle_length(self, distance):
+        indexes = np.argwhere(self.img[:, distance:].sum(axis=0) != self.img.shape[0]).flatten()
+
         for i in range(0, indexes.size - 1):
             if indexes[i + 1] - indexes[i] > 4:
                 return int(indexes[i] - indexes[0])
 
-        return int(indexes[-1] - indexes[0])
+        return int(indexes[-1] + 1 - indexes[0])
 
     def game_position(self, img):
         minv1 = self.img.T.argmin()
-
         left = minv1//self.img.shape[0]
         bottom = minv1%self.img.shape[0]
 

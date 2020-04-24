@@ -1,7 +1,6 @@
 import time
 import pyautogui
-from pynput import keyboard
-import curses
+from statistics import mean
 
 from lib.screen_reader import ScreenReader, ImageScanner
 from lib.game import Game
@@ -12,37 +11,44 @@ screen = ScreenReader()
 scanner = ImageScanner()
 game = Game()
 
-# novo = 0
+time2 = 0
+distance1 = 0
+speeds = []
+speed = 0
 
 while True:
-    img = screen.grab((20, 100, int(WIDTH*0.48), int(HEIGHT*0.78)))
+    img = screen.grab((20, 100, int(WIDTH*0.49), int(HEIGHT*0.78)))
 
     scanner.add_image(img)
     scanner.adjust_game_position()
-
-    # screen.show(scanner.img)
 
     if not scanner.game_over():
         game.run()
         distance = scanner.obstacle_distance()
 
         if distance:
-            # if distance > game.distance and game.distance < 50:
-            #     novo += 1
-            #     print('novo: ', novo)
+            if distance < 120:
+                pyautogui.press('up')
+
+            if distance > game.distance:
+                distance1 = distance
+                time1 = time.time()
+
+            if distance <= 150 and not time2:
+                time2 = time.time() 
+                speeds.append(((distance1 - distance)/150)/(time2 - time1))
+                time2 = 0
+
+            if len(speeds) > 10:
+                speed = mean(speeds)
+                speeds.clear()
 
             if (game.distance > 0 and game.distance < 50) and distance > 100:
                 game.obstacles += 1
 
-            # if distance < 115:
-            #     pyautogui.press('up')
-
-            length = scanner.obstacle_length()
-            game.set_state(distance, length, False)
+            length = scanner.obstacle_length(distance)
+            game.set_state(distance, length, False, speed)
 
     else:
         game = Game()
     game.log()
-
-curses.endwin()
-curses.curs_set(True)
