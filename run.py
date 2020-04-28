@@ -43,7 +43,7 @@ while True:
                 speed = mean(speeds)
                 speeds.clear()
 
-            if (game.distance > 0 and game.distance < 50) and distance > 100:
+            if (game.distance > 0 and game.distance < 75) and distance > 100:
                 game.obstacles += 1
 
             length = scanner.obstacle_length(distance)

@@ -64,8 +64,9 @@ class ImageScanner:
         self.img = img
 
     def adjust_game_position(self):
-        pos = self.game_position(self.img)
-        self.img = self.img[pos['top'] + 20:pos['bottom'] - 10, pos['left']+80:]
+        minv1 = np.flipud(self.img).argmin()
+        bottom = minv1//self.img.shape[1]
+        self.img = self.img[int(.24*self.img.shape[0]):-bottom - 20, 80:]
 
     def obstacle_distance(self):
         pos = self.distance(self.img)
@@ -84,19 +85,3 @@ class ImageScanner:
                 return int(indexes[i] - indexes[0])
 
         return int(indexes[-1] + 1 - indexes[0])
-
-    def game_position(self, img):
-        minv1 = self.img.T.argmin()
-        left = minv1//self.img.shape[0]
-        bottom = minv1%self.img.shape[0]
-
-        minv2 = self.img[:bottom - 20].argmin()
-        top = minv2//self.img.shape[0]
-        right = minv2%self.img.shape[0]
-
-        return {
-            'top': top, 
-            'left': left,
-            'right': right,
-            'bottom': bottom
-        }
