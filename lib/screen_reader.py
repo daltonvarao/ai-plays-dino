@@ -12,7 +12,7 @@ class ScreenReader:
     def grab(self, monitor):
         with mss.mss() as screen:
             img = np.array(screen.grab(monitor))
-            img = self.process_img(img)
+            # img = self.process_img(img)
             return img
 
     def binarize(self, img):
@@ -51,12 +51,12 @@ class ScreenReader:
 class ImageScanner:
 
     def __init__(self):
-        pass
+        self.img_positions = (0, 0, 0, 0)
 
     def game_over(self):
         white_pixels = np.count_nonzero(self.img[:60])
 
-        if white_pixels > 33200:
+        if white_pixels >= 32000:
             return False
         return True
 
@@ -65,8 +65,12 @@ class ImageScanner:
 
     def adjust_game_position(self):
         minv1 = np.flipud(self.img).argmin()
-        bottom = minv1//self.img.shape[1]
-        self.img = self.img[int(.24*self.img.shape[0]):-bottom - 20, 80:]
+        # bottom = minv1//self.img.shape[1]
+
+        self.top = self.img.shape[0] // 4
+        self.bottom = (-minv1 // self.img.shape[1]) - 20
+        self.left = 96
+        self.img = self.img[self.top:self.bottom, self.left:]
 
     def obstacle_distance(self):
         pos = self.distance(self.img)
@@ -81,7 +85,16 @@ class ImageScanner:
         indexes = np.argwhere(self.img[:, distance:].sum(axis=0) != self.img.shape[0]).flatten()
 
         for i in range(0, indexes.size - 1):
-            if indexes[i + 1] - indexes[i] > 4:
+            if indexes[i + 1] - indexes[i] > 10:
                 return int(indexes[i] - indexes[0])
 
         return int(indexes[-1] + 1 - indexes[0])
+
+    def obstacle_height(self, distance, length):
+        indexes = np.argwhere(self.img[:, distance:distance + length].sum(axis=1) != length).flatten()
+
+        for i in range(0, indexes.size - 1):
+            if indexes[i + 1] - indexes[i] > 10:
+                return int(indexes[i] - indexes[0])
+
+        return int(indexes[0]), int(indexes[-1])
