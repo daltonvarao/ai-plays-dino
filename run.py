@@ -5,7 +5,7 @@ import cv2
 
 from lib.screen_reader import ScreenReader, ImageScanner
 from lib.game import Game
-from lib.ga import GeneticAlgorithm
+from lib.ga2 import GeneticAlgorithm
 
 start = input("Pressione 's' e aperte enter para iniciar: ")
 
@@ -19,9 +19,9 @@ distance1 = 0
 speeds = []
 speed = 2.9
 pop_size = 24
-net_layers = (4, 5, 5, 1)
+net_layers = (4, 10, 10, 10, 1)
 
-genetic_algorithm = GeneticAlgorithm(net_layers=net_layers, pop_size=pop_size, mr=0.15, bests_num=4, cr=0.5)
+genetic_algorithm = GeneticAlgorithm(net_layers=net_layers, pop_size=pop_size, mr=0.15, bests_num=4, cr=4)
 game = Game(genetic_algorithm)
 
 if start == 's':
@@ -41,7 +41,6 @@ try:
             distance_x = scanner.obstacle_distance()
 
             if distance_x:
-
                 if distance_x > game.distance_x and game.distance_x > 0:
                     game.obstacles += 1
 
@@ -75,7 +74,7 @@ try:
             if genetic_algorithm.train_mode:
                 if not game.stopped:
                     if genetic_algorithm.generation.current_individual.has_experience():
-                        genetic_algorithm.generation.current_individual.save_score(game.obstacles)
+                        genetic_algorithm.generation.current_individual.save_score(game.obstacles if game.obstacles > 1 else 0)
                         genetic_algorithm.generation.next_individual()
                     
                     if genetic_algorithm.generation.over:
@@ -89,4 +88,4 @@ try:
 
 except KeyboardInterrupt as error:
     print('\nLast Generation genes saved')
-    genetic_algorithm.save_many()
+    # genetic_algorithm.save_many()
